@@ -15,6 +15,7 @@
 ### Nmap 扫描
 ```bash
 nmap -sV -T4 -sC 10.144.148.138 -Pn
+```
 结果：
 
 22/tcp  open  ssh   OpenSSH 9.2p1 Debian 2+deb12u6
