@@ -129,15 +129,15 @@ chmod 777 /tmp/cat #更改权限，使可执行
 
 Get root flag ：af13b0bee69f8a877c3faf667f7beacf
 
- ![image-20260528133925289](C:\Users\33103\Documents\GitHub\Writeups\HTB\Starting Point\OOPSIE\images\rootflag.png)
+ ![image-20260528133925289](images\rootflag.png)
 
 ---
 
 # HackTheBox Q&A
 
-![QA](C:\Users\33103\Documents\GitHub\Writeups\HTB\Starting Point\OOPSIE\images\Q&A.png)
+![QA](images\Q&A.png)
 
-![QA2](C:\Users\33103\Documents\GitHub\Writeups\HTB\Starting Point\OOPSIE\images\Q&A2.png)
+![QA2](images\Q&A2.png)
 
 ---
 
